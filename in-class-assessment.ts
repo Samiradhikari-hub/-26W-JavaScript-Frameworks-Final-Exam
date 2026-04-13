@@ -76,7 +76,10 @@ interface Movie {
 // - Add express.json() middleware to parse JSON bodies
 // ============================================================================
 
-// YOUR CODE HERE
+dotenv.config();
+const app = express();
+const PORT = 5000;
+app.use(express.json());
 
 
 // ============================================================================
