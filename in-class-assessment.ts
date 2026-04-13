@@ -202,7 +202,26 @@ app.post("/api/movies", async (req: Request, res: Response) => {
 // - Handles errors with try-catch
 // ============================================================================
 
-// YOUR CODE HERE
+app.put("/api/movies/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const updateData = req.body;
+
+    const query = { _id: new ObjectId(id) };
+
+    const moviesCollection = await connectToDatabase();
+    const result = await moviesCollection.updateOne(query, { $set: updateData });
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Movie no found or not updated" });
+    }
+
+    res.status(200).json({ message: "Movie update successfully" });
+  } catch (error: any) {
+    console.error("Error updating movie:", error);
+    res.status(500).json({ message: "Update failed", error: error.message });
+  }
+});
 
 
 // ============================================================================
