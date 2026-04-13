@@ -92,7 +92,25 @@ app.use(express.json());
 // - Console.logs a success message with database and collection names
 // ============================================================================
 
-// YOUR CODE HERE
+async function connectToDatabase(): Promise<Collection<Movie>> {
+  const connectionString = process.env.DB_CONN_STRING;
+  const dbName = process.env.DB_NAME;
+  const collectionName = process.env.COLLECTION_NAME;
+
+  if (!connectionString || !dbName || !collectionName) {
+    throw new Error("Missing database configuration in .env file");
+  }
+
+  const client = new MongoClient(connectionString);
+  await client.connect();
+
+  const db: Db = client.db(dbName);
+  const collection: Collection<Movie> = db.collection<Movie>(collectionName);
+
+  console.log(`Succssfully connected to database: ${dbName} and collection: ${collectionName}`);
+
+  return collection;
+}
 
 
 // ============================================================================
