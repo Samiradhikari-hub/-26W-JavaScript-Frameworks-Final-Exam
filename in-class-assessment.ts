@@ -59,7 +59,13 @@ import dotenv from "dotenv";
 // - rating (number)
 // ============================================================================
 
-
+interface Movie {
+  _id?: ObjectId;
+  title: string;
+  director: string;
+  year: number;
+  rating: number;
+}
 
 
 // ============================================================================
