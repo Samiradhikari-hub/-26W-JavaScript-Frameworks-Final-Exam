@@ -121,7 +121,17 @@ async function connectToDatabase(): Promise<Collection<Movie>> {
 // - Handles errors with try-catch and returns status 500 with error message
 // ============================================================================
 
-// YOUR CODE HERE
+app.get("/api/movies", async (req: Request, res: Response) => {
+  try {
+    const moviesCollection = await connectToDatabase();
+    const movies = await moviesCollection.find({}).toArray();
+
+    res.status(200).json(movies);
+  } catch (error: any) {
+    console.error("Error fetching movies:", error);
+    res.status(500).json({ message: "Failed to retrieve movies", error: error.message });
+  }
+});
 
 
 // ============================================================================
