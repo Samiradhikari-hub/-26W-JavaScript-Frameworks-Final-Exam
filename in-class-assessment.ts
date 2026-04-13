@@ -234,7 +234,24 @@ app.put("/api/movies/:id", async (req: Request, res: Response) => {
 // - Handles errors with try-catch
 // ============================================================================
 
-// YOUR CODE HERE
+app.delete("/api/movies/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const query = { _id: new ObjectId(id) };
+
+    const moviesCollection = await connectToDatabase();
+    const result = await moviesCollection.deleteOne(query);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Movie not found, nothing to delete" });
+    }
+
+    res.status(200).json({ message: "Movie deleted successfully" });
+  } catch (error: any) {
+    console.error("Error deleting movie:", error);
+    res.status(500).json({ message: "Delete operation failed", error: error.message });
+  }
+});
 
 
 // ============================================================================
