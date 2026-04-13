@@ -144,7 +144,24 @@ app.get("/api/movies", async (req: Request, res: Response) => {
 // - Handles errors with try-catch and returns status 500
 // ============================================================================
 
-// YOUR CODE HERE
+app.get("/api/movies/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const query = { _id: new ObjectId(id) };
+
+    const moviesCollection = await connectToDatabase();
+    const movie = await moviesCollection.findOne(query);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.status(200).json(movie);
+  } catch (error: any) {
+    console.error("Error finding movie:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 
 
 // ============================================================================
