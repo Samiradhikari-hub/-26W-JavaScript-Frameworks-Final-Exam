@@ -174,7 +174,22 @@ app.get("/api/movies/:id", async (req: Request, res: Response) => {
 // - Handles errors appropriately
 // ============================================================================
 
-// YOUR CODE HERE
+app.post("/api/movies", async (req: Request, res: Response) => {
+  try {
+    const newMovie: Movie = req.body;
+
+    const moviesCollection = await connectToDatabase();
+    const result = await moviesCollection.insertOne(newMovie);
+
+    res.status(201).json({
+      message: "Movie added successfully",
+      insertedId: result.insertedId
+    });
+  } catch (error: any) {
+    console.error("Error creating movie:", error);
+    res.status(500).json({ message: "Failed to create movie", error: error.message });
+  }
+});
 
 
 // ============================================================================
